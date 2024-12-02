@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="style.css" />
+    <title>Sorting</title>
+    <link
+      rel="icon"
+      type="image/x-icon"
+      sizes="16x16"
+      href="images/favicon.ico"
+    />
+  </head>
+  <body>
+    <div class="container">
+      <div class="div1">
+        <label for="number">Length of future array:</label>
+        <input
+          type="text"
+          id="number"
+          name="number"
+          placeholder="Put any number"
+        />
+      </div>
+      <br />
+      <div class="div1">
+        <label for="number">Max number of future array:</label>
+        <input
+          type="text"
+          id="maxNumber"
+          name="maxNumber"
+          placeholder="Put any number"
+        />
+      </div>
+      <br />
+      <button type="button" onclick="getNumber()">Generate numbers</button>
+      <div id="lengthArray"></div>
+      <div id="arrayNumbers"></div>
+      <div class="algorithm">
+        <div style="display: flex; align-items: center">
+          <label for="algorithm">Choose a sorting algorithm:</label>
+          <select name="algorithm" id="algorithm">
+            <option value="bubbleSort">Bubble Sort</option>
+            <option value="quickSort">Quick Sort</option>
+          </select>
+          <div id="result"></div>
+          <button type="button" onclick="sort()">Sort</button>
+        </div>
+        <div>
+          <div id="maxNumberArr"></div>
+          <div id="sortedNumbers"></div>
+        </div>
+      </div>
+    </div>
+  </body>
+
+  <script>
+    function myFunction() {
+      var x = document.getElementById("sorting").value;
+      document.getElementById("demo").innerHTML = x;
+    }
+    function getNumber() {
+      let n = document.getElementById("number").value;
+      let maxN = document.getElementById("maxNumber").value;
+      const xhr = new XMLHttpRequest();
+      xhr.open(
+        "GET",
+        "http://localhost:3000/generate?count=" + n + "&maxnumber=" + maxN
+      );
+      xhr.onload = processNumbersRequest;
+      xhr.send();
+    }
+
+    function processNumbersRequest(event) {
+      let xhr = event.srcElement;
+      document.getElementById("lengthArray").innerText =
+        "Length of array is: " + document.getElementById("number").value;
+      document.getElementById("arrayNumbers").innerHTML = xhr.responseText;
+    }
+
+    function sort() {
+      const selectedAlgorithm = document.getElementById("algorithm").value;
+      let numbers = document.getElementById("arrayNumbers").innerHTML;
+      const data = JSON.stringify({
+        numbers: numbers,
+        option: selectedAlgorithm,
+      });
+      document.getElementById("maxNumberArr").innerText =
+        "Max number is: " + document.getElementById("maxNumber").value;
+
+      const xhr = new XMLHttpRequest();
+      xhr.open("POST", "http://localhost:3000/sort");
+      xhr.setRequestHeader("Content-Type", "application/json");
+      xhr.onload = processSortingRequest;
+      xhr.send(data);
+      clearData();
+    }
+
+    function processSortingRequest(event) {
+      let xhr = event.srcElement;
+      let data = xhr.responseText;
+      console.log(data);
+      document.getElementById("sortedNumbers").innerHTML = data;
+    }
+    function clearData() {
+      document.getElementById("number").value = "";
+      document.getElementById("maxNumber").value = "";
+    }
+  </script>
+</html>
