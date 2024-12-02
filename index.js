@@ -3,6 +3,8 @@ import bodyParser from "body-parser";
 import { dirname } from "path";
 import path from "path";
 import { fileURLToPath } from "url";
+import { bubbleSort } from "./algorithms/bubbleSort.js";
+import { quickSort } from "./algorithms/quickSort.js";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 
@@ -50,15 +52,7 @@ app.post("/sort", (req, res) => {
   let numbers = JSON.parse(data.numbers);
 
   if (data.option == "bubbleSort") {
-    for (let i = 0; i < numbers.length - 1; i++) {
-      for (let z = 0; z < numbers.length - 1; z++) {
-        if (numbers[z] > numbers[z + 1]) {
-          let el = numbers[z];
-          numbers[z] = numbers[z + 1];
-          numbers[z + 1] = el;
-        }
-      }
-    }
+    numbers = bubbleSort(numbers);
   } else if (data.option == "quickSort") {
     numbers = quickSort(numbers);
   }
@@ -76,13 +70,3 @@ app.listen(port, (err) => {
   }
   console.log(`Server running on port ${port}`);
 });
-
-function quickSort(numbers) {
-  if (numbers.length <= 1) return numbers;
-  const pivot = numbers[Math.floor(numbers.length / 2)];
-  const left = numbers.filter((num) => num < pivot);
-  const right = numbers.filter((num) => num > pivot);
-  const equal = numbers.filter((num) => num === pivot);
-
-  return [...quickSort(left), ...equal, ...quickSort(right)];
-}
