@@ -48,7 +48,8 @@
           <button type="button" onclick="sort()">Sort</button>
         </div>
         <div>
-          <div id="maxNumberArr"></div>
+          <div id="timePerformance"></div>
+
           <div id="sortedNumbers"></div>
         </div>
       </div>
@@ -81,13 +82,12 @@
 
     function sort() {
       const selectedAlgorithm = document.getElementById("algorithm").value;
+
       let numbers = document.getElementById("arrayNumbers").innerHTML;
       const data = JSON.stringify({
         numbers: numbers,
         option: selectedAlgorithm,
       });
-      document.getElementById("maxNumberArr").innerText =
-        "Max number is: " + document.getElementById("maxNumber").value;
 
       const xhr = new XMLHttpRequest();
       xhr.open("POST", "http://localhost:3000/sort");
@@ -99,9 +99,11 @@
 
     function processSortingRequest(event) {
       let xhr = event.srcElement;
-      let data = xhr.responseText;
-
-      document.getElementById("sortedNumbers").innerHTML = data;
+      let data = JSON.parse(xhr.responseText);
+      console.log("data:", data);
+      document.getElementById("timePerformance").innerText =
+        "Time performance is :  " + data.time + "ms";
+      document.getElementById("sortedNumbers").innerHTML = data.numbers;
     }
     function clearData() {
       document.getElementById("number").value = "";

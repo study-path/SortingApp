@@ -50,17 +50,20 @@ app.post("/sort", (req, res) => {
   const data = req.body;
   console.log("data: ", data);
   let numbers = JSON.parse(data.numbers);
+  let result;
 
   if (data.option == "bubbleSort") {
-    numbers = bubbleSort(numbers);
+    result = bubbleSort(numbers);
   } else if (data.option == "quickSort") {
-    numbers = quickSort(numbers);
+    console.time("quickSort");
+    result = quickSort(numbers);
+    console.timeEnd("quickSort");
   }
 
   res.writeHead(200, {
     "Content-Type": "application/json",
   });
-  res.end(JSON.stringify(numbers));
+  res.end(JSON.stringify(result));
   console.log("request sorting, end");
 });
 
