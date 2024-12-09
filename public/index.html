@@ -43,6 +43,7 @@
           <select name="algorithm" id="algorithm">
             <option value="bubbleSort">Bubble Sort</option>
             <option value="quickSort">Quick Sort</option>
+            <option value="mergeSort">Merge Sort</option>
           </select>
           <div id="result"></div>
           <button type="button" onclick="sort()">Sort</button>
@@ -100,9 +101,8 @@
     function processSortingRequest(event) {
       let xhr = event.srcElement;
       let data = JSON.parse(xhr.responseText);
-      console.log("data:", data);
       document.getElementById("timePerformance").innerText =
-        "Time performance is :  " + data.time + "ms";
+        "Time performance is : " + data.time + "ms";
       document.getElementById("sortedNumbers").innerHTML = data.numbers;
     }
     function clearData() {

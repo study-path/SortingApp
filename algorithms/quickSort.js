@@ -1,4 +1,5 @@
 import { performance } from "perf_hooks";
+
 export function quickSort(numbers) {
   const start = performance.now();
 
@@ -20,6 +21,7 @@ function sort(numbers) {
     return numbers;
   }
   const pivot = numbers[Math.floor(numbers.length / 2)];
+
   const left = [];
   const right = [];
   const equal = [];

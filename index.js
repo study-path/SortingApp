@@ -5,6 +5,7 @@ import path from "path";
 import { fileURLToPath } from "url";
 import { bubbleSort } from "./algorithms/bubbleSort.js";
 import { quickSort } from "./algorithms/quickSort.js";
+import { mergeSort } from "./algorithms/mergeSort.js";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 
@@ -19,6 +20,7 @@ app.use((req, res, next) => {
   next();
 });
 
+//bodyParser.limit = "50mb";
 app.use(bodyParser.json());
 
 const port = 3000;
@@ -26,10 +28,12 @@ app.get("/", (req, res) => {
   res.sendFile(__dirname + "/public/index.html");
 });
 
-app.get("/generate", (req, res) => {
+app.get("/generate", async (req, res) => {
   console.log("request numbers, start");
   const maxNumber = req.query.maxnumber;
   const nums = [];
+
+  // await new Promise((resolve) => setTimeout(resolve, 5000));
 
   console.log("Max number: ", req.query.maxnumber);
   console.log("Count: ", req.query.count);
@@ -55,9 +59,9 @@ app.post("/sort", (req, res) => {
   if (data.option == "bubbleSort") {
     result = bubbleSort(numbers);
   } else if (data.option == "quickSort") {
-    console.time("quickSort");
     result = quickSort(numbers);
-    console.timeEnd("quickSort");
+  } else if (data.option == "mergeSort") {
+    result = mergeSort(numbers);
   }
 
   res.writeHead(200, {
